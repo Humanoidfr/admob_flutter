@@ -70,7 +70,16 @@ class AdmobBanner : NSObject, FlutterPlatformView {
             }
         }
 
-        let request = GADRequest()
+        let request: GADRequest
+        
+        if (args["customTargeting"] != nil) {
+            request = DFPRequest()
+            
+            let targeting = args["customTargeting"] as! NSDictionary
+            (request as! DFPRequest).customTargeting = targeting.swiftDictionary
+        } else {
+            request = GADRequest()
+        }
 
         if ((args["nonPersonalizedAds"] as? Bool) == true) {
             let extras = GADExtras()
@@ -147,4 +156,17 @@ extension AdmobBanner : GADBannerViewDelegate {
     func adViewDidDismissScreen(_ bannerView: GADBannerView) {
         channel.invokeMethod("closed", arguments: nil)
     }
+}
+
+extension NSDictionary {
+  
+  var swiftDictionary: [String : AnyObject] {
+    var swiftDictionary: [String : AnyObject] = [:]
+    let keys = self.allKeys.flatMap { $0 as? String }
+    for key in keys {
+      let keyValue = self.value(forKey: key) as AnyObject
+      swiftDictionary[key] = keyValue
+    }
+    return swiftDictionary
+  }
 }
