@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'admob.dart';
 import 'admob_banner_controller.dart';
 import 'admob_banner_size.dart';
@@ -11,12 +12,14 @@ class AdmobBanner extends StatefulWidget {
   final AdmobBannerSize adSize;
   final void Function(AdmobAdEvent, Map<String, dynamic>) listener;
   final void Function(AdmobBannerController) onBannerCreated;
+  final Map<String, String> customTargeting;
   final bool nonPersonalizedAds;
 
   AdmobBanner({
     Key key,
     @required this.adUnitId,
     @required this.adSize,
+    this.customTargeting,
     this.listener,
     this.onBannerCreated,
     this.nonPersonalizedAds = false,
@@ -79,7 +82,8 @@ class _AdmobBannerState extends State<AdmobBanner> {
           );
         }
 
-        return Text('$defaultTargetPlatform is not yet supported by the plugin');
+        return Text(
+            '$defaultTargetPlatform is not yet supported by the plugin');
       },
     );
   }
@@ -93,8 +97,9 @@ class _AdmobBannerState extends State<AdmobBanner> {
   }
 
   Map<String, dynamic> get bannerCreationParams => <String, dynamic>{
-    'adUnitId': widget.adUnitId,
-    'adSize': widget.adSize.toMap,
-    'nonPersonalizedAds': widget.nonPersonalizedAds,
-  };
+        'adUnitId': widget.adUnitId,
+        'adSize': widget.adSize.toMap,
+        'customTargeting': widget.customTargeting,
+        'nonPersonalizedAds': widget.nonPersonalizedAds,
+      };
 }
