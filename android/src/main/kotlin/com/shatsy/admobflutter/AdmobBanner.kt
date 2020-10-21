@@ -35,14 +35,14 @@ class AdmobBanner(context: Context, messenger: BinaryMessenger, id: Int, args: H
 
             val adRequestBuilder = PublisherAdRequest.Builder()
 
-            val npa: Boolean? = args["customTargeting"] as Boolean?
+            val npa: Boolean? = args["nonPersonalizedAds"] as Boolean?
             if (npa == true) {
                 val extras = Bundle()
                 extras.putString("npa", "1")
                 adRequestBuilder.addNetworkExtrasBundle(AdMobAdapter::class.java, extras)
             }
 
-            for ((k, v) in args["adSize"] as HashMap<*, *>) {
+            for ((k, v) in args["customTargeting"] as HashMap<*, *>) {
                 if (k is String && v is String) {
                     adRequestBuilder.addCustomTargeting(k, v)
                 }
